@@ -430,8 +430,15 @@ class GMusicLibraryProvider(backend.LibraryProvider):
             result_artists |= track.artists
             result_albums.add(track.album)
 
+        def cmp_track_no(x, y):
+            if x.disc_no and y.disc_no:
+                val = cmp(x.disc_no, y.disc_no)  # NOQA
+                if val != 0:
+                    return val
+            return cmp(x.track_no, y.track_no)  # NOQA
+        result_tracks.sort(cmp_track_no)
         return result_tracks, result_artists, result_albums
-
+        
     def _validate_query(self, query):
         for (_, values) in query.iteritems():
             if not values:
